@@ -1,0 +1,845 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "type": "Feature",
+            "properties": {
+                "id": "azuay",
+                "name": "Azuay",
+                "population": 881394
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -78.65,
+                            -2.53
+                        ],
+                        [
+                            -79.45,
+                            -2.53
+                        ],
+                        [
+                            -79.45,
+                            -3.45
+                        ],
+                        [
+                            -78.65,
+                            -3.45
+                        ],
+                        [
+                            -78.65,
+                            -2.53
+                        ]
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "id": "bolivar",
+                "name": "Bolívar",
+                "population": 209933
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -78.65,
+                            -1.65
+                        ],
+                        [
+                            -79.35,
+                            -1.65
+                        ],
+                        [
+                            -79.35,
+                            -2.15
+                        ],
+                        [
+                            -78.65,
+                            -2.15
+                        ],
+                        [
+                            -78.65,
+                            -1.65
+                        ]
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "id": "canar",
+                "name": "Cañar",
+                "population": 281396
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -78.55,
+                            -2.15
+                        ],
+                        [
+                            -79.15,
+                            -2.15
+                        ],
+                        [
+                            -79.15,
+                            -2.75
+                        ],
+                        [
+                            -78.55,
+                            -2.75
+                        ],
+                        [
+                            -78.55,
+                            -2.15
+                        ]
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "id": "carchi",
+                "name": "Carchi",
+                "population": 186869
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -77.65,
+                            0.52
+                        ],
+                        [
+                            -78.35,
+                            0.52
+                        ],
+                        [
+                            -78.35,
+                            1.15
+                        ],
+                        [
+                            -77.65,
+                            1.15
+                        ],
+                        [
+                            -77.65,
+                            0.52
+                        ]
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "id": "cotopaxi",
+                "name": "Cotopaxi",
+                "population": 488716
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -78.35,
+                            -1.15
+                        ],
+                        [
+                            -79.05,
+                            -1.15
+                        ],
+                        [
+                            -79.05,
+                            -0.55
+                        ],
+                        [
+                            -78.35,
+                            -0.55
+                        ],
+                        [
+                            -78.35,
+                            -1.15
+                        ]
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "id": "chimborazo",
+                "name": "Chimborazo",
+                "population": 524004
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -78.45,
+                            -2.15
+                        ],
+                        [
+                            -79.05,
+                            -2.15
+                        ],
+                        [
+                            -79.05,
+                            -1.45
+                        ],
+                        [
+                            -78.45,
+                            -1.45
+                        ],
+                        [
+                            -78.45,
+                            -2.15
+                        ]
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "id": "el-oro",
+                "name": "El Oro",
+                "population": 715751
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -79.45,
+                            -3.05
+                        ],
+                        [
+                            -80.15,
+                            -3.05
+                        ],
+                        [
+                            -80.15,
+                            -3.85
+                        ],
+                        [
+                            -79.45,
+                            -3.85
+                        ],
+                        [
+                            -79.45,
+                            -3.05
+                        ]
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "id": "esmeraldas",
+                "name": "Esmeraldas",
+                "population": 643654
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -78.45,
+                            0.65
+                        ],
+                        [
+                            -79.65,
+                            0.65
+                        ],
+                        [
+                            -79.65,
+                            1.35
+                        ],
+                        [
+                            -78.45,
+                            1.35
+                        ],
+                        [
+                            -78.45,
+                            0.65
+                        ]
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "id": "guayas",
+                "name": "Guayas",
+                "population": 4387434
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -79.35,
+                            -2.85
+                        ],
+                        [
+                            -80.25,
+                            -2.85
+                        ],
+                        [
+                            -80.25,
+                            -1.95
+                        ],
+                        [
+                            -79.35,
+                            -1.95
+                        ],
+                        [
+                            -79.35,
+                            -2.85
+                        ]
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "id": "imbabura",
+                "name": "Imbabura",
+                "population": 476257
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -77.95,
+                            -0.15
+                        ],
+                        [
+                            -78.95,
+                            -0.15
+                        ],
+                        [
+                            -78.95,
+                            0.65
+                        ],
+                        [
+                            -77.95,
+                            0.65
+                        ],
+                        [
+                            -77.95,
+                            -0.15
+                        ]
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "id": "loja",
+                "name": "Loja",
+                "population": 521154
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -78.95,
+                            -4.55
+                        ],
+                        [
+                            -79.95,
+                            -4.55
+                        ],
+                        [
+                            -79.95,
+                            -3.45
+                        ],
+                        [
+                            -78.95,
+                            -3.45
+                        ],
+                        [
+                            -78.95,
+                            -4.55
+                        ]
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "id": "los-rios",
+                "name": "Los Ríos",
+                "population": 921763
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -79.15,
+                            -1.65
+                        ],
+                        [
+                            -79.95,
+                            -1.65
+                        ],
+                        [
+                            -79.95,
+                            -0.85
+                        ],
+                        [
+                            -79.15,
+                            -0.85
+                        ],
+                        [
+                            -79.15,
+                            -1.65
+                        ]
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "id": "manabi",
+                "name": "Manabí",
+                "population": 1562079
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -79.45,
+                            -1.65
+                        ],
+                        [
+                            -80.95,
+                            -1.65
+                        ],
+                        [
+                            -80.95,
+                            0.15
+                        ],
+                        [
+                            -79.45,
+                            0.15
+                        ],
+                        [
+                            -79.45,
+                            -1.65
+                        ]
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "id": "morona-santiago",
+                "name": "Morona Santiago",
+                "population": 196535
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -77.45,
+                            -3.85
+                        ],
+                        [
+                            -78.65,
+                            -3.85
+                        ],
+                        [
+                            -78.65,
+                            -1.95
+                        ],
+                        [
+                            -77.45,
+                            -1.95
+                        ],
+                        [
+                            -77.45,
+                            -3.85
+                        ]
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "id": "napo",
+                "name": "Napo",
+                "population": 133705
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -77.15,
+                            -1.35
+                        ],
+                        [
+                            -78.15,
+                            -1.35
+                        ],
+                        [
+                            -78.15,
+                            -0.35
+                        ],
+                        [
+                            -77.15,
+                            -0.35
+                        ],
+                        [
+                            -77.15,
+                            -1.35
+                        ]
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "id": "pastaza",
+                "name": "Pastaza",
+                "population": 114202
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -76.25,
+                            -2.55
+                        ],
+                        [
+                            -78.15,
+                            -2.55
+                        ],
+                        [
+                            -78.15,
+                            -1.15
+                        ],
+                        [
+                            -76.25,
+                            -1.15
+                        ],
+                        [
+                            -76.25,
+                            -2.55
+                        ]
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "id": "pichincha",
+                "name": "Pichincha",
+                "population": 3228233
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -78.25,
+                            -0.65
+                        ],
+                        [
+                            -79.25,
+                            -0.65
+                        ],
+                        [
+                            -79.25,
+                            0.25
+                        ],
+                        [
+                            -78.25,
+                            0.25
+                        ],
+                        [
+                            -78.25,
+                            -0.65
+                        ]
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "id": "tungurahua",
+                "name": "Tungurahua",
+                "population": 590600
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -78.25,
+                            -1.55
+                        ],
+                        [
+                            -78.85,
+                            -1.55
+                        ],
+                        [
+                            -78.85,
+                            -1.05
+                        ],
+                        [
+                            -78.25,
+                            -1.05
+                        ],
+                        [
+                            -78.25,
+                            -1.55
+                        ]
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "id": "zamora-chinchipe",
+                "name": "Zamora Chinchipe",
+                "population": 120416
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -78.25,
+                            -5.15
+                        ],
+                        [
+                            -79.15,
+                            -5.15
+                        ],
+                        [
+                            -79.15,
+                            -3.65
+                        ],
+                        [
+                            -78.25,
+                            -3.65
+                        ],
+                        [
+                            -78.25,
+                            -5.15
+                        ]
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "id": "galapagos",
+                "name": "Galápagos",
+                "population": 33042
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -91.75,
+                            -1.45
+                        ],
+                        [
+                            -89.15,
+                            -1.45
+                        ],
+                        [
+                            -89.15,
+                            0.85
+                        ],
+                        [
+                            -91.75,
+                            0.85
+                        ],
+                        [
+                            -91.75,
+                            -1.45
+                        ]
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "id": "sucumbios",
+                "name": "Sucumbíos",
+                "population": 230503
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -75.95,
+                            -0.95
+                        ],
+                        [
+                            -77.85,
+                            -0.95
+                        ],
+                        [
+                            -77.85,
+                            0.85
+                        ],
+                        [
+                            -75.95,
+                            0.85
+                        ],
+                        [
+                            -75.95,
+                            -0.95
+                        ]
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "id": "orellana",
+                "name": "Orellana",
+                "population": 161338
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -75.25,
+                            -1.45
+                        ],
+                        [
+                            -77.25,
+                            -1.45
+                        ],
+                        [
+                            -77.25,
+                            -0.15
+                        ],
+                        [
+                            -75.25,
+                            -0.15
+                        ],
+                        [
+                            -75.25,
+                            -1.45
+                        ]
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "id": "santo-domingo",
+                "name": "Santo Domingo de los Tsáchilas",
+                "population": 458580
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -79.05,
+                            -0.45
+                        ],
+                        [
+                            -79.45,
+                            -0.45
+                        ],
+                        [
+                            -79.45,
+                            0.05
+                        ],
+                        [
+                            -79.05,
+                            0.05
+                        ],
+                        [
+                            -79.05,
+                            -0.45
+                        ]
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "id": "santa-elena",
+                "name": "Santa Elena",
+                "population": 401178
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -80.25,
+                            -2.55
+                        ],
+                        [
+                            -81.05,
+                            -2.55
+                        ],
+                        [
+                            -81.05,
+                            -1.95
+                        ],
+                        [
+                            -80.25,
+                            -1.95
+                        ],
+                        [
+                            -80.25,
+                            -2.55
+                        ]
+                    ]
+                ]
+            }
+        }
+    ]
+}
