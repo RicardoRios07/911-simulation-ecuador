@@ -33,6 +33,46 @@ const serviceIcons: Record<string, React.ElementType> = {
   riesgos: AlertTriangle,
 }
 
+const serviceInstitutions: Record<string, string[]> = {
+  seguridad: [
+    'Policía Nacional',
+    'Fuerzas Armadas',
+    'Agentes Metropolitanos'
+  ],
+  transito: [
+    'ANT',
+    'Comisiones de Tránsito',
+    'Agentes Civiles de Tránsito'
+  ],
+  sanitaria: [
+    'Ministerio de Salud',
+    'IESS',
+    'Cruz Roja',
+    'Hospitales'
+  ],
+  municipal: [
+    'Municipios',
+    'Empresas Municipales',
+    'Servicios Urbanos'
+  ],
+  siniestros: [
+    'Bomberos',
+    'Cruz Roja',
+    'Policía Nacional'
+  ],
+  militar: [
+    'Fuerzas Armadas',
+    'Rescate Militar',
+    'Seguridad Fronteriza'
+  ],
+  riesgos: [
+    'SGR',
+    'Bomberos',
+    'Fuerzas Armadas',
+    'GAD'
+  ],
+}
+
 export function AgentsPanel({ agents, selectedProvince }: AgentsPanelProps) {
   const filteredAgents = selectedProvince 
     ? agents.filter(a => a.province === selectedProvince)
@@ -75,6 +115,10 @@ export function AgentsPanel({ agents, selectedProvince }: AgentsPanelProps) {
             <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
             Respondiendo
           </span>
+          <span className="flex items-center gap-1">
+            <div className="w-2 h-2 rounded-full bg-purple-500" />
+            En tránsito
+          </span>
         </div>
       </CardHeader>
       <CardContent className="p-0">
@@ -108,6 +152,23 @@ export function AgentsPanel({ agents, selectedProvince }: AgentsPanelProps) {
                     </div>
                   </div>
 
+                  {/* Instituciones que atienden */}
+                  <div className="mb-2">
+                    <p className="text-[10px] text-muted-foreground mb-1">Instituciones:</p>
+                    <div className="flex flex-wrap gap-1">
+                      {serviceInstitutions[service.id]?.map((institution, idx) => (
+                        <Badge 
+                          key={idx} 
+                          variant="outline" 
+                          className="text-[9px] px-1.5 py-0"
+                          style={{ borderColor: service.color, color: service.color }}
+                        >
+                          {institution}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+
                   {/* Barra de estado */}
                   <div className="h-2 rounded-full bg-muted overflow-hidden flex">
                     {service.available > 0 && (
@@ -137,32 +198,65 @@ export function AgentsPanel({ agents, selectedProvince }: AgentsPanelProps) {
                     <span className="text-red-500">{service.responding} resp.</span>
                   </div>
 
-                  {/* Visualización de agentes como iconos */}
-                  <div className="flex flex-wrap gap-1 mt-2">
-                    {service.agents.slice(0, 20).map(agent => (
-                      <div
-                        key={agent.id}
-                        className={`w-4 h-4 rounded-full flex items-center justify-center transition-all ${
-                          agent.status === 'available' 
-                            ? 'bg-emerald-500/20' 
-                            : agent.status === 'busy'
-                            ? 'bg-amber-500/20'
-                            : 'bg-red-500/20 animate-pulse'
-                        }`}
-                        title={`${agent.id} - ${agent.status}`}
+                  {/* Visualización de agentes como avatares */}
+                  <div className="flex flex-wrap gap-1.5 mt-3">
+                    {service.agents.slice(0, 24).map(agent => {
+                      const statusColor = 
+                        agent.status === 'available' ? 'emerald' :
+                        agent.status === 'busy' ? 'amber' :
+                        agent.status === 'relocating' ? 'purple' :
+                        'red'
+                      
+                      return (
+                        <div
+                          key={agent.id}
+                          className={`relative group cursor-pointer`}
+                          title={`${agent.id} - ${agent.status}`}
+                        >
+                          {/* Avatar del agente */}
+                          <div
+                            className={`w-7 h-7 rounded-full flex items-center justify-center border-2 transition-all ${
+                              agent.status === 'responding' ? 'animate-pulse' : ''
+                            }`}
+                            style={{ 
+                              backgroundColor: `${service.color}30`,
+                              borderColor: `var(--${statusColor}-500, ${service.color})`
+                            }}
+                          >
+                            <Icon 
+                              className="w-3.5 h-3.5" 
+                              style={{ color: service.color }} 
+                            />
+                          </div>
+                          
+                          {/* Indicador de estado */}
+                          <div 
+                            className={`absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-background ${
+                              agent.status === 'responding' ? 'animate-pulse' : ''
+                            }`}
+                            style={{ 
+                              backgroundColor: `var(--${statusColor}-500, ${service.color})`
+                            }}
+                          />
+                          
+                          {/* Tooltip on hover */}
+                          <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-popover text-popover-foreground text-[9px] rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10 border border-border shadow-lg">
+                            <div className="font-semibold">{agent.id}</div>
+                            <div className="capitalize">{agent.status}</div>
+                            <div className="text-muted-foreground">{ECUADOR_PROVINCES.find(p => p.id === agent.province)?.name}</div>
+                          </div>
+                        </div>
+                      )
+                    })}
+                    {service.agents.length > 24 && (
+                      <div 
+                        className="w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-semibold"
+                        style={{ 
+                          backgroundColor: `${service.color}20`,
+                          color: service.color
+                        }}
                       >
-                        <User className={`w-2.5 h-2.5 ${
-                          agent.status === 'available' 
-                            ? 'text-emerald-500' 
-                            : agent.status === 'busy'
-                            ? 'text-amber-500'
-                            : 'text-red-500'
-                        }`} />
-                      </div>
-                    ))}
-                    {service.agents.length > 20 && (
-                      <div className="w-4 h-4 rounded-full bg-muted flex items-center justify-center">
-                        <span className="text-[8px] text-muted-foreground">+{service.agents.length - 20}</span>
+                        +{service.agents.length - 24}
                       </div>
                     )}
                   </div>
