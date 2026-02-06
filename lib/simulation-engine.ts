@@ -17,7 +17,16 @@ export class SimulationEngine {
   }
 
   private initializeAgents() {
+    // Nombres de ejemplo para los agentes
+    const names = [
+      'Juan P.', 'María G.', 'Carlos R.', 'Ana M.', 'Luis F.',
+      'Carmen S.', 'Pedro L.', 'Sofia V.', 'Diego A.', 'Laura C.',
+      'Miguel T.', 'Isabel N.', 'Jorge E.', 'Patricia D.', 'Roberto H.',
+      'Valentina Q.', 'Fernando B.', 'Gabriela O.', 'Andrés M.', 'Daniela P.'
+    ]
+    
     // Inicializar agentes basados en población y demanda estimada
+    let agentIndex = 0
     ECUADOR_PROVINCES.forEach(province => {
       const baseAgents = Math.max(3, Math.floor(province.population / 100000))
       
@@ -33,7 +42,10 @@ export class SimulationEngine {
               x: province.coordinates.x + (Math.random() - 0.5) * 5,
               y: province.coordinates.y + (Math.random() - 0.5) * 5,
             },
+            name: names[agentIndex % names.length] + ' ' + (Math.floor(agentIndex / names.length) + 1),
+            avatar: `AG-${String(agentIndex + 1).padStart(3, '0')}`,
           })
+          agentIndex++
         }
       })
     })
@@ -426,26 +438,65 @@ export class SimulationEngine {
 
     // Seleccionar agentes a mover
     const agentsToMove = availableAgents.slice(0, count)
+    const fromProvinceData = ECUADOR_PROVINCES.find(p => p.id === fromProvince)!
     const toProvinceData = ECUADOR_PROVINCES.find(p => p.id === toProvince)!
 
     // Simular movimiento (cambiar estado a 'relocating')
     agentsToMove.forEach((agent, index) => {
       agent.status = 'relocating'
+      agent.relocatingFrom = fromProvince
+      agent.relocatingTo = toProvince
+      agent.relocatingProgress = 0
       
-      // Programar llegada después de un tiempo (simulación de viaje)
-      setTimeout(() => {
-        agent.province = toProvince
-        agent.position = {
-          x: toProvinceData.coordinates.x + (Math.random() - 0.5) * 5,
-          y: toProvinceData.coordinates.y + (Math.random() - 0.5) * 5,
-        }
-        agent.status = 'available'
+      const startPos = { ...agent.position }
+      const endPos = {
+        x: toProvinceData.coordinates.x + (Math.random() - 0.5) * 5,
+        y: toProvinceData.coordinates.y + (Math.random() - 0.5) * 5,
+      }
+      
+      // Duración del viaje basado en distancia (3-6 segundos)
+      const distance = Math.sqrt(
+        Math.pow(endPos.x - startPos.x, 2) + Math.pow(endPos.y - startPos.y, 2)
+      )
+      const travelTime = Math.max(3000, Math.min(6000, distance * 100))
+      const startTime = Date.now()
+      
+      // Animar el movimiento con requestAnimationFrame
+      const animateMovement = () => {
+        const elapsed = Date.now() - startTime - (index * 500) // Escalonar inicio
+        const progress = Math.min(1, elapsed / travelTime)
         
-        // Actualizar estadísticas
-        this.updateProvinceStats(fromProvince)
-        this.updateProvinceStats(toProvince)
-        this.notifyListeners()
-      }, 3000 + index * 1000) // Simular que llegan en intervalos
+        if (progress < 1) {
+          agent.relocatingProgress = progress
+          // Interpolación suave (ease-in-out)
+          const easeProgress = progress < 0.5 
+            ? 2 * progress * progress 
+            : 1 - Math.pow(-2 * progress + 2, 2) / 2
+          
+          agent.position = {
+            x: startPos.x + (endPos.x - startPos.x) * easeProgress,
+            y: startPos.y + (endPos.y - startPos.y) * easeProgress,
+          }
+          this.notifyListeners()
+          requestAnimationFrame(animateMovement)
+        } else {
+          // Llegada
+          agent.province = toProvince
+          agent.position = endPos
+          agent.status = 'available'
+          agent.relocatingProgress = undefined
+          agent.relocatingFrom = undefined
+          agent.relocatingTo = undefined
+          
+          // Actualizar estadísticas
+          this.updateProvinceStats(fromProvince)
+          this.updateProvinceStats(toProvince)
+          this.notifyListeners()
+        }
+      }
+      
+      // Iniciar animación después del escalonamiento
+      setTimeout(() => requestAnimationFrame(animateMovement), index * 500)
     })
 
     return true

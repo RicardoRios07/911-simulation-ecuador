@@ -207,16 +207,22 @@ export function AgentsPanel({ agents, selectedProvince }: AgentsPanelProps) {
                         agent.status === 'relocating' ? 'purple' :
                         'red'
                       
+                      const statusBgColor = 
+                        agent.status === 'available' ? 'bg-emerald-500' :
+                        agent.status === 'busy' ? 'bg-amber-500' :
+                        agent.status === 'relocating' ? 'bg-purple-500' :
+                        'bg-red-500'
+                      
                       return (
                         <div
                           key={agent.id}
                           className={`relative group cursor-pointer`}
-                          title={`${agent.id} - ${agent.status}`}
+                          title={`${agent.name || agent.avatar || agent.id}`}
                         >
                           {/* Avatar del agente */}
                           <div
-                            className={`w-7 h-7 rounded-full flex items-center justify-center border-2 transition-all ${
-                              agent.status === 'responding' ? 'animate-pulse' : ''
+                            className={`w-7 h-7 rounded-full flex items-center justify-center border-2 transition-all hover:scale-110 ${
+                              agent.status === 'responding' || agent.status === 'relocating' ? 'animate-pulse' : ''
                             }`}
                             style={{ 
                               backgroundColor: `${service.color}30`,
@@ -231,19 +237,41 @@ export function AgentsPanel({ agents, selectedProvince }: AgentsPanelProps) {
                           
                           {/* Indicador de estado */}
                           <div 
-                            className={`absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-background ${
-                              agent.status === 'responding' ? 'animate-pulse' : ''
+                            className={`absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-background ${statusBgColor} ${
+                              agent.status === 'responding' || agent.status === 'relocating' ? 'animate-pulse' : ''
                             }`}
-                            style={{ 
-                              backgroundColor: `var(--${statusColor}-500, ${service.color})`
-                            }}
                           />
                           
-                          {/* Tooltip on hover */}
-                          <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-popover text-popover-foreground text-[9px] rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10 border border-border shadow-lg">
-                            <div className="font-semibold">{agent.id}</div>
-                            <div className="capitalize">{agent.status}</div>
-                            <div className="text-muted-foreground">{ECUADOR_PROVINCES.find(p => p.id === agent.province)?.name}</div>
+                          {/* Tooltip on hover - Mejorado */}
+                          <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1.5 bg-popover text-popover-foreground text-[9px] rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10 border border-border shadow-lg min-w-[120px]">
+                            <div className="font-bold text-[10px] mb-0.5">{agent.name || agent.avatar || 'Agente'}</div>
+                            <div className="text-[8px] text-muted-foreground mb-1">{agent.avatar || agent.id}</div>
+                            <div className={`capitalize font-semibold ${
+                              agent.status === 'available' ? 'text-emerald-400' :
+                              agent.status === 'relocating' ? 'text-purple-400' :
+                              agent.status === 'busy' ? 'text-amber-400' :
+                              'text-red-400'
+                            }`}>
+                              {agent.status === 'relocating' ? '🚗 En tránsito' : 
+                               agent.status === 'responding' ? '🚨 Respondiendo' :
+                               agent.status === 'busy' ? '⏳ Ocupado' : '✓ Disponible'}
+                            </div>
+                            <div className="text-muted-foreground mt-0.5">
+                              {agent.status === 'relocating' && agent.relocatingTo ? 
+                                `→ ${ECUADOR_PROVINCES.find(p => p.id === agent.relocatingTo)?.name}` :
+                                ECUADOR_PROVINCES.find(p => p.id === agent.province)?.name
+                              }
+                            </div>
+                            {agent.relocatingProgress !== undefined && (
+                              <div className="mt-1">
+                                <div className="w-full bg-muted rounded-full h-1">
+                                  <div 
+                                    className="bg-purple-500 h-1 rounded-full transition-all" 
+                                    style={{ width: `${agent.relocatingProgress * 100}%` }}
+                                  />
+                                </div>
+                              </div>
+                            )}
                           </div>
                         </div>
                       )

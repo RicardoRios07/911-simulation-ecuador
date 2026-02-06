@@ -23,6 +23,11 @@ export interface Agent {
   province: string
   currentEmergency?: Emergency
   position: { x: number; y: number }
+  name?: string
+  avatar?: string
+  relocatingTo?: string
+  relocatingFrom?: string
+  relocatingProgress?: number // 0 a 1
 }
 
 export interface Emergency {

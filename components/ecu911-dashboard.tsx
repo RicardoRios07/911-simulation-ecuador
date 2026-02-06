@@ -7,11 +7,14 @@ import { EmergencyFeed } from './emergency-feed'
 import { StatisticsPanel } from './statistics-panel'
 import { SimulationControls } from './simulation-controls'
 import { AnalysisPanel } from './analysis-panel'
+import { RelocationPanel } from './relocation-panel'
 import { SimulationEngine } from '@/lib/simulation-engine'
 import { Agent, Emergency, CSVData, SERVICE_TYPES, ECUADOR_PROVINCES } from '@/lib/types'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { useToast } from '@/hooks/use-toast'
 import { 
   Phone, 
   Shield, 
@@ -24,6 +27,7 @@ import {
 } from 'lucide-react'
 
 export function ECU911Dashboard() {
+  const { toast } = useToast()
   const [isRunning, setIsRunning] = useState(false)
   const [speed, setSpeed] = useState(1)
   const [currentTime, setCurrentTime] = useState(new Date(2025, 10, 1, 0, 0, 0)) // 1 noviembre 2025
@@ -38,6 +42,7 @@ export function ECU911Dashboard() {
   const [currentDistribution, setCurrentDistribution] = useState<Record<string, Record<string, number>>>({})
   const [suggestedDistribution, setSuggestedDistribution] = useState<Record<string, Record<string, number>>>({})
   const [provinceEmergencies, setProvinceEmergencies] = useState<Record<string, number>>({})
+  const [redistributionMode, setRedistributionMode] = useState(false)
 
   const engineRef = useRef<SimulationEngine | null>(null)
   const intervalRef = useRef<NodeJS.Timeout | null>(null)
@@ -256,11 +261,31 @@ export function ECU911Dashboard() {
                 selectedProvince={selectedProvince}
                 onProvinceSelect={setSelectedProvince}
                 provinceStats={provinceStats}
+                redistributionMode={redistributionMode}
+                onRedistributionModeChange={setRedistributionMode}
                 onRedistribute={(from, to, serviceType, count) => {
                   if (engineRef.current) {
                     const success = engineRef.current.redistributeAgents(from, to, serviceType, count)
                     if (success) {
                       setAgents([...engineRef.current.getState().agents])
+                      
+                      // Mostrar notificación de inicio
+                      const serviceName = SERVICE_TYPES.find(s => s.id === serviceType)?.name
+                      const fromName = ECUADOR_PROVINCES.find(p => p.id === from)?.name
+                      const toName = ECUADOR_PROVINCES.find(p => p.id === to)?.name
+                      
+                      toast({
+                        title: "🚗 Redistribución Iniciada",
+                        description: `${count} agente${count !== 1 ? 's' : ''} de ${serviceName} viajando de ${fromName} a ${toName}`,
+                        duration: 4000,
+                      })
+                    } else {
+                      toast({
+                        title: "❌ Error",
+                        description: "No hay suficientes agentes disponibles para redistribuir",
+                        variant: "destructive",
+                        duration: 3000,
+                      })
                     }
                   }
                 }}
@@ -280,16 +305,39 @@ export function ECU911Dashboard() {
                 hasCSVData={hasCSVData}
               />
               
-              <Card className="bg-card/95 backdrop-blur-sm">
+              {/* Panel de personal en tránsito */}
+              <RelocationPanel agents={agents} />
+              
+              <Card className="bg-card/95 backdrop-blur-sm border-2 border-primary/30">
                 <CardHeader className="pb-3">
                   <CardTitle className="text-sm flex items-center gap-2">
                     <ArrowLeftRight className="w-4 h-4" />
                     Redistribuir Personal
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-2">
+                <CardContent className="space-y-3">
+                  <Button
+                    size="sm"
+                    variant={redistributionMode ? "default" : "outline"}
+                    onClick={() => {
+                      setRedistributionMode(!redistributionMode)
+                      if (!redistributionMode) {
+                        toast({
+                          title: "✅ Modo Redistribución Activado",
+                          description: "Haz clic en una provincia origen, luego en una destino",
+                          duration: 3000,
+                        })
+                      }
+                    }}
+                    className="w-full font-semibold"
+                  >
+                    <ArrowLeftRight className="w-4 h-4 mr-2" />
+                    {redistributionMode ? 'Cancelar Redistribución' : 'Activar Redistribución'}
+                  </Button>
                   <p className="text-xs text-muted-foreground">
-                    Haz clic en una provincia de origen, luego en una provincia de destino para redistribuir personal.
+                    {redistributionMode 
+                      ? '🟢 Modo activo: Haz clic en provincias para redistribuir'
+                      : 'Haz clic en el botón para activar el modo redistribución'}
                   </p>
                   {selectedProvince && (
                     <div className="text-xs bg-primary/10 p-2 rounded">

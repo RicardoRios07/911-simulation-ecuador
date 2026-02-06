@@ -134,3 +134,53 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Animaciones personalizadas para agentes en tránsito */
+@keyframes agent-move {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(139, 92, 246, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 15px rgba(139, 92, 246, 0.8);
+  }
+}
+
+.animate-agent-move {
+  animation: agent-move 2s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Estilos para mapas de Leaflet */
+.leaflet-container {
+  background: oklch(0.13 0.01 260) !important;
+}
+
+.leaflet-popup-content-wrapper {
+  background: oklch(0.17 0.01 260);
+  color: oklch(0.97 0 0);
+  border: 1px solid oklch(0.28 0.01 260);
+}
+
+.leaflet-popup-tip {
+  background: oklch(0.17 0.01 260);
+}
+
+/* Mejoras de transición */
+.transition-smooth {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
