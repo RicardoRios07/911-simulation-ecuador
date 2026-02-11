@@ -267,7 +267,7 @@ export function EcuadorMap({
     layer.bindTooltip(
       `<div style="padding: 4px">
         <strong>${feature.properties.name}</strong><br/>
-        Emergencias: ${stats?.emergencias || 0}<br/>
+        Emergencias: ${stats?.emergencies || 0}<br/>
         Agentes: ${stats?.agents || 0}
       </div>`,
       { sticky: true }

@@ -1,4 +1,7 @@
-import { Agent, Emergency, CSVData, SERVICE_TYPES, ECUADOR_PROVINCES, ProvinceStatistics } from './types'
+import { Agent, Emergency, CSVData, SERVICE_TYPES, ECUADOR_PROVINCES, ProvinceStatistics, CapacityAnalysis, RedistributionSuggestion, Alert } from './types'
+import { PersonnelDataLoader } from './personnel-data-loader'
+import { RedistributionAnalyzer } from './redistribution-analyzer'
+import { AlertSystem } from './alert-system'
 
 // Motor de simulación de eventos discretos
 export class SimulationEngine {
@@ -10,10 +13,21 @@ export class SimulationEngine {
   private csvData: CSVData[] = []
   private provinceStats: Map<string, ProvinceStatistics> = new Map()
   private listeners: Set<(state: SimulationState) => void> = new Set()
+  
+  // Nuevos módulos integrados
+  private personnelLoader: PersonnelDataLoader = new PersonnelDataLoader()
+  private redistributionAnalyzer: RedistributionAnalyzer = new RedistributionAnalyzer()
+  private alertSystem: AlertSystem = new AlertSystem()
+  
+  // Tracking de emergencias por provincia para análisis
+  private emergencyHistory: Map<string, Emergency[]> = new Map()
+  private lastAnalysisTime: Date = new Date()
+  private readonly ANALYSIS_INTERVAL_MS = 60000 // Análisis cada 60 segundos
 
   constructor() {
     this.initializeAgents()
     this.initializeStats()
+    this.initializeEmergencyHistory()
   }
 
   private initializeAgents() {
@@ -63,9 +77,72 @@ export class SimulationEngine {
     })
   }
 
+  private initializeEmergencyHistory() {
+    ECUADOR_PROVINCES.forEach(province => {
+      this.emergencyHistory.set(province.id, [])
+    })
+  }
+
   loadCSVData(data: CSVData[]) {
     this.csvData = data
     this.recalculateDistribution()
+  }
+
+  /**
+   * Carga datos de personal desde el CSV
+   */
+  async loadPersonnelData(csvContent: string) {
+    await this.personnelLoader.loadFromCSV(csvContent)
+    this.syncAgentsWithPersonnelData()
+  }
+
+  /**
+   * Sincroniza agentes con datos reales de personal
+   */
+  private syncAgentsWithPersonnelData() {
+    const allPersonnel = this.personnelLoader.getAllPersonnel()
+    
+    if (allPersonnel.length === 0) return
+
+    // Reconstruir agentes basados en datos reales
+    this.agents = []
+    let agentIndex = 0
+
+    allPersonnel.forEach(provinceData => {
+      const province = ECUADOR_PROVINCES.find(p => p.id === provinceData.provincia)
+      if (!province) return
+
+      // Crear agentes por categoría
+      const categories: [string, number, string][] = [
+        ['policia_nacional', provinceData.policia_nacional, 'seguridad'],
+        ['medicos_msp_iess', provinceData.medicos_msp_iess, 'sanitaria'],
+        ['bomberos', provinceData.bomberos, 'siniestros'],
+        ['personal_transito', provinceData.personal_transito, 'transito'],
+        ['fuerzas_armadas', provinceData.fuerzas_armadas, 'militar'],
+        ['agentes_municipales', provinceData.agentes_municipales, 'municipal'],
+      ]
+
+      categories.forEach(([category, count, serviceType]) => {
+        for (let i = 0; i < count; i++) {
+          this.agents.push({
+            id: `${province.id}-${serviceType}-${i}`,
+            type: serviceType,
+            status: 'available',
+            province: province.id,
+            position: {
+              x: province.coordinates.x + (Math.random() - 0.5) * 5,
+              y: province.coordinates.y + (Math.random() - 0.5) * 5,
+            },
+            name: `${category.split('_')[0]}-${i + 1}`,
+            avatar: `AG-${String(agentIndex + 1).padStart(3, '0')}`,
+          })
+          agentIndex++
+        }
+      })
+    })
+
+    // Actualizar estadísticas
+    this.updateAllProvinceStats()
   }
 
   private recalculateDistribution() {
@@ -260,35 +337,188 @@ export class SimulationEngine {
     return options[Math.floor(Math.random() * options.length)]
   }
 
-  assignAgent(emergency: Emergency): Agent | null {
-    const availableAgents = this.agents.filter(
-      a => a.status === 'available' && 
-           a.type === emergency.type && 
-           a.province === emergency.province
+  /**
+   * Asigna un agente disponible a una emergencia
+   */
+  private assignAgent(emergency: Emergency) {
+    if (emergency.status !== 'pending') return
+
+    // Buscar agente disponible de la provincia y tipo adecuados
+    const suitableAgents = this.agents.filter(
+      a =>
+        a.status === 'available' &&
+        a.province === emergency.province &&
+        a.type === emergency.type
     )
 
-    if (availableAgents.length === 0) {
-      // Buscar en provincias cercanas
-      const nearbyAgents = this.agents.filter(
-        a => a.status === 'available' && a.type === emergency.type
+    let agent = suitableAgents[0]
+
+    // Si no hay agente del tipo exacto, buscar cualquier agente disponible en la provincia
+    if (!agent) {
+      const provinceAgents = this.agents.filter(
+        a => a.status === 'available' && a.province === emergency.province
       )
-      if (nearbyAgents.length > 0) {
-        const agent = nearbyAgents[0]
-        agent.status = 'responding'
-        agent.currentEmergency = emergency
-        emergency.assignedAgent = agent.id
-        emergency.status = 'assigned'
-        return agent
-      }
-      return null
+      agent = provinceAgents[0]
     }
 
-    const agent = availableAgents[0]
-    agent.status = 'responding'
-    agent.currentEmergency = emergency
-    emergency.assignedAgent = agent.id
-    emergency.status = 'assigned'
-    return agent
+    // Si aún no hay agente, buscar el más cercano de otras provincias
+    if (!agent) {
+      const anyAgent = this.agents.find(a => a.status === 'available')
+      if (anyAgent) {
+        agent = anyAgent
+      }
+    }
+
+    if (agent) {
+      agent.status = 'responding'
+      agent.currentEmergency = emergency
+      emergency.status = 'assigned'
+      emergency.assignedAgent = agent.id
+    }
+  }
+
+  /**
+   * Agrega emergencia al historial de la provincia
+   */
+  private addEmergencyToHistory(emergency: Emergency) {
+    const history = this.emergencyHistory.get(emergency.province) || []
+    history.push(emergency)
+
+    // Mantener solo últimas 24 horas
+    const cutoff = new Date(this.currentTime.getTime() - 24 * 60 * 60 * 1000)
+    const filtered = history.filter(e => e.timestamp >= cutoff)
+    this.emergencyHistory.set(emergency.province, filtered)
+  }
+
+  /**
+   * Realiza análisis de capacidad y genera alertas
+   */
+  private performCapacityAnalysis() {
+    const analyses: CapacityAnalysis[] = []
+
+    ECUADOR_PROVINCES.forEach(province => {
+      const personnel = this.personnelLoader.getProvincePersonnel(province.id)
+      if (!personnel) return
+
+      const emergencyList = this.emergencyHistory.get(province.id) || []
+      const emergenciesLast24h = emergencyList.length
+
+      const analysis = this.redistributionAnalyzer.analyzeProvinceCapacity(
+        province.id,
+        personnel,
+        emergenciesLast24h,
+        province.population
+      )
+
+      analyses.push(analysis)
+
+      // Generar alertas basadas en el análisis
+      this.alertSystem.evaluateCapacity(analysis)
+    })
+
+    // Generar sugerencias de redistribución
+    const suggestions = this.redistributionAnalyzer.generateRedistributionSuggestions(analyses)
+    
+    // Generar alertas para sugerencias prioritarias
+    suggestions.slice(0, 3).forEach(suggestion => {
+      this.alertSystem.evaluateRedistributionSuggestion(suggestion)
+    })
+  }
+
+  /**
+   * Obtiene análisis de capacidad actual de todas las provincias
+   */
+  getCapacityAnalyses(): CapacityAnalysis[] {
+    const analyses: CapacityAnalysis[] = []
+
+    ECUADOR_PROVINCES.forEach(province => {
+      const personnel = this.personnelLoader.getProvincePersonnel(province.id)
+      if (!personnel) return
+
+      const emergencyList = this.emergencyHistory.get(province.id) || []
+      const emergenciesLast24h = emergencyList.length
+
+      const analysis = this.redistributionAnalyzer.analyzeProvinceCapacity(
+        province.id,
+        personnel,
+        emergenciesLast24h,
+        province.population
+      )
+
+      analyses.push(analysis)
+    })
+
+    return analyses
+  }
+
+  /**
+   * Obtiene sugerencias de redistribución
+   */
+  getRedistributionSuggestions(): RedistributionSuggestion[] {
+    const analyses = this.getCapacityAnalyses()
+    return this.redistributionAnalyzer.generateRedistributionSuggestions(analyses)
+  }
+
+  /**
+   * Obtiene todas las alertas activas
+   */
+  getActiveAlerts(): Alert[] {
+    return this.alertSystem.getActiveAlerts()
+  }
+
+  /**
+   * Obtiene estadísticas de alertas
+   */
+  getAlertStatistics() {
+    return this.alertSystem.getAlertStatistics()
+  }
+
+  /**
+   * Suscribe a alertas en tiempo real
+   */
+  subscribeToAlerts(callback: (alert: Alert) => void): () => void {
+    return this.alertSystem.subscribe(callback)
+  }
+
+  /**
+   * Reconoce una alerta
+   */
+  acknowledgeAlert(alertId: string, acknowledgedBy?: string): boolean {
+    return this.alertSystem.acknowledgeAlert(alertId, acknowledgedBy)
+  }
+
+  /**
+   * Resuelve una alerta
+   */
+  resolveAlert(alertId: string, reason?: string, resolvedBy?: string): boolean {
+    return this.alertSystem.resolveAlert(alertId, reason, resolvedBy)
+  }
+
+  /**
+   * Obtiene el loader de personal (para acceso directo a datos)
+   */
+  getPersonnelLoader(): PersonnelDataLoader {
+    return this.personnelLoader
+  }
+
+  /**
+   * Obtiene el analizador de redistribución
+   */
+  getRedistributionAnalyzer(): RedistributionAnalyzer {
+    return this.redistributionAnalyzer
+  }
+
+  /**
+   * Obtiene el sistema de alertas
+   */
+  getAlertSystem(): AlertSystem {
+    return this.alertSystem
+  }
+
+  private updateAllProvinceStats() {
+    ECUADOR_PROVINCES.forEach(province => {
+      this.updateProvinceStats(province.id)
+    })
   }
 
   resolveEmergency(emergencyId: string) {
@@ -316,6 +546,9 @@ export class SimulationEngine {
     if (Math.random() < emergencyRate) {
       const emergency = this.generateEmergency()
       this.emergencies.push(emergency)
+      
+      // Agregar al historial
+      this.addEmergencyToHistory(emergency)
       
       // Intentar asignar agente inmediatamente
       this.assignAgent(emergency)

@@ -350,7 +350,7 @@ export function ECU911Dashboard() {
 
             {/* Panel de Emergencias Activas - Derecha (debajo del selector) */}
             <div className="absolute top-16 right-4 z-[1001] w-96 max-h-[calc(100vh-150px)] overflow-hidden">
-              <EmergencyFeed emergencies={emergencies} />
+              <EmergencyFeed emergencies={emergencies} selectedProvince={selectedProvince} />
             </div>
           </TabsContent>
 

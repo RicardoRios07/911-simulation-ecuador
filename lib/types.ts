@@ -76,6 +76,118 @@ export interface CSVData {
   año: string
 }
 
+// Tipos de Personal del 911 Ecuador
+export type PersonnelCategory = 
+  | 'personal_ecu911'
+  | 'policia_nacional'
+  | 'fuerzas_armadas'
+  | 'medicos_msp_iess'
+  | 'bomberos'
+  | 'personal_transito'
+  | 'cruz_roja'
+  | 'agentes_municipales'
+
+export interface PersonnelByProvince {
+  provincia: string
+  personal_ecu911: number
+  policia_nacional: number
+  fuerzas_armadas: number
+  medicos_msp_iess: number
+  bomberos: number
+  personal_transito: number
+  cruz_roja: number
+  agentes_municipales: number
+  total_personal: number
+  notas: string
+}
+
+export interface PersonnelData {
+  byProvince: Map<string, PersonnelByProvince>
+  nationalTotals: Record<PersonnelCategory, number>
+}
+
+// Análisis de Teoría de Colas (M/M/c)
+export interface QueueAnalysis {
+  utilizationFactor: number // ρ = λ / (c * μ)
+  utilizationPercentage: number
+  probabilityOfWaiting: number // Erlang-C
+  avgWaitTimeMinutes: number // Wq
+  avgSystemTimeMinutes: number // W
+  avgQueueLength: number // Lq
+  avgSystemLength: number // L
+  isOverloaded: boolean // ρ >= 1.0
+  isCritical: boolean // ρ >= 0.90
+  isOptimal: boolean // 0.40 <= ρ <= 0.75
+  isUnderutilized: boolean // ρ < 0.40
+  recommendedPersonnel: number // c óptimo
+}
+
+// Análisis de Capacidad Provincial
+export interface CapacityAnalysis {
+  provinceId: string
+  currentPersonnel: number
+  recommendedPersonnel: number
+  personnelDifference: number // positivo = déficit, negativo = exceso
+  utilizationRate: number // porcentaje
+  emergenciesPerHour: number
+  emergenciesLast24h: number
+  emergenciesPer100k: number
+  personnelPer100k: number
+  emergenciesPerPersonnel: number
+  avgResponseTimeMinutes: number
+  queueAnalysis: QueueAnalysis
+  status: 'critical' | 'overloaded' | 'optimal' | 'underutilized'
+  priority: number // 1-10, donde 10 es más urgente
+}
+
+// Sugerencia de Redistribución
+export interface RedistributionSuggestion {
+  id: string
+  fromProvince: string
+  toProvince: string
+  totalPersonnel: number
+  personnelBreakdown: Record<string, number> // por categoría
+  reason: string
+  priority: number // 1-10
+  impactScore: number // 0-100
+  distanceKm: number
+  estimatedImprovementPercentage: number
+  currentUtilization: number
+  projectedUtilization: number
+  cost: number // costo estimado de redistribución
+  timestamp: Date
+}
+
+// Sistema de Alertas
+export type AlertType = 
+  | 'capacity_critical'
+  | 'capacity_overload'
+  | 'capacity_warning'
+  | 'capacity_underutilized'
+  | 'response_time_high'
+  | 'redistribution_suggested'
+  | 'system_error'
+
+export type AlertSeverity = 'critical' | 'high' | 'medium' | 'low'
+
+export interface Alert {
+  id: string
+  type: AlertType
+  severity: AlertSeverity
+  title: string
+  message: string
+  provinceId?: string
+  timestamp: Date
+  acknowledged: boolean
+  acknowledgedAt?: Date
+  acknowledgedBy?: string
+  resolved: boolean
+  resolvedAt?: Date
+  resolvedReason?: string
+  resolvedBy?: string
+  data?: Record<string, any>
+}
+
 export const SERVICE_TYPES: EmergencyType[] = [
   { id: 'seguridad', name: 'Seguridad Ciudadana', color: '#f59e0b', icon: 'shield', count: 181765, priority: 1 },
   { id: 'transito', name: 'Tránsito y Movilidad', color: '#3b82f6', icon: 'car', count: 34780, priority: 2 },

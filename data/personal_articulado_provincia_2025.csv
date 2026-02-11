@@ -1,0 +1,63 @@
+Provincia,Personal_ECU911,Policia_Nacional,Fuerzas_Armadas,Medicos_MSP_IESS,Bomberos,Personal_Transito,Cruz_Roja,Agentes_Municipales,Total_Personal,Notas
+Pichincha,520,280,45,85,35,55,12,215,1247,"Incluye Planta Central y Zona 9. Agentes: 42 ECU directo + 41 Metro + 66 GAT + 36 CMC + 30 Riesgos"
+Guayas,400,350,55,90,40,60,15,45,1055,"Centro Zonal Samborondón, zona de alta conflictividad criminal"
+Azuay,85,65,8,22,12,18,4,8,222,"Centro Zonal Cuenca, 200 personas en estudios ergonómicos reportados"
+Manabí,101,75,12,25,15,20,5,8,261,"Centro Zonal Portoviejo + Sala Manta (5). 388 capacitados conjuntamente"
+El_Oro,90,95,18,28,15,22,5,6,279,"Machala, 504,535 alertas. Personal militar 2.9% (doble del promedio)"
+Los_Rios,75,80,12,24,12,18,4,5,230,"Babahoyo. 20 cámaras adicionales, videovigilancia compensa falta de personal físico"
+Tungurahua,80,60,9,20,18,16,4,7,214,"Zona 3. 308 capacitados en incendios, 438 en atención inclusiva"
+Imbabura,65,55,10,18,10,14,3,6,181,"Sede Zonal Ibarra. 107 capacitados en drogas. 3,209 líneas sancionadas"
+Santo_Domingo,70,65,10,22,14,18,4,5,208,"Centro Local. 100,205 emergencias, alto tránsito pesado"
+Chimborazo,55,45,7,15,12,12,3,5,154,"Riobamba, convenios con Bomberos para capacitación"
+Cotopaxi,50,40,6,14,10,11,2,4,137,"Latacunga, zona de riesgo volcánico"
+Esmeraldas,60,85,15,20,10,15,3,4,212,"5,649 líneas sancionadas. Alta conflictividad fronteriza. Videovigilancia reforzada"
+Loja,55,50,12,16,10,13,3,5,164,"318,684 alertas. Personal fronterizo especializado"
+Carchi,40,45,12,12,8,10,2,3,132,"Tulcán. 904 líneas sancionadas. Protocolo fronterizo"
+Cañar,35,28,4,10,6,8,2,3,96,"Azogues, Sala Operativa vinculada a Zona 6"
+Bolívar,30,25,3,9,5,7,2,2,83,"Personal ajustado a demanda provincial"
+Santa_Elena,38,42,6,12,8,10,2,4,122,"Acompañamiento visual a operativos FF.AA. en sectores conflictivos"
+Morona_Santiago,32,28,5,10,6,8,2,2,93,"Macas. Incremento 6% tránsito, más recursos ANT y MSP"
+Pastaza,28,24,4,9,5,7,2,2,81,"Puyo. Sala Operativa"
+Napo,30,26,5,10,6,8,2,2,89,"Tena. Inspecciones conjuntas para reubicación de cámaras"
+Zamora_Chinchipe,26,30,8,9,5,7,2,2,89,"Control minería ilegal. Personal militar reforzado"
+Orellana,32,28,6,11,6,9,2,2,96,"Lago Agrio. Inspecciones de campo con Policía. Sistema SIIFNE"
+Sucumbios,35,40,10,12,7,10,2,2,118,"Nueva Loja. 1,767 líneas sancionadas. Interoperabilidad SIIFNE"
+Galapagos,12,8,2,8,4,5,2,1,42,"San Cristóbal. Especialización en emergencias marítimas/turísticas"
+TOTAL_NACIONAL,1544,1669,284,511,259,388,90,337,5082,"Personal ECU 911: 1,544. Personal Articulado estimado: ~3,538"
+
+DISTRIBUCIÓN_PORCENTUAL_NACIONAL
+Tipo_Personal,Cantidad,Porcentaje,Fundamento
+Personal_ECU_911,1544,30.4%,Dato oficial: servidores directos bajo nómina SIS ECU 911
+Policía_Nacional,1669,32.8%,64.92%-68.6% de emergencias son Seguridad Ciudadana
+Fuerzas_Armadas,284,5.6%,1.49%-2.9% promedio nacional (mayor en fronteras)
+Médicos_MSP_IESS,511,10.1%,11.46%-12.8% de emergencias sanitarias. 186 ambulancias nuevas
+Bomberos,259,5.1%,2.15% de emergencias siniestros. 308 capacitados Zona 3
+Personal_Tránsito,388,7.6%,11%-13.04% emergencias tránsito (CTE/ANT/Municipales)
+Cruz_Roja,90,1.8%,Articulación en emergencias masivas
+Agentes_Municipales,337,6.6%,Servicios municipales 5.96%. Quito: 215 agentes especializados
+Total_Sistema,5082,100%,Personal en consolas + articulados rotativos
+
+CAPACITACIÓN_Y_BIENESTAR_2025
+Concepto,Cantidad,Detalle
+Total_Capacitados,6032,Personal propio + articulado
+Derechos_Humanos,1437,Inclusión y discapacidades
+Combate_Incendios,308,Zona 3 (Bomberos + civiles)
+Atención_Inclusiva,438,Zona 3 - certificados
+Capacitación_Conjunta_Zona_4,388,ECU + Policía + Salud + Bomberos
+Manejo_Estrés,176,Zonas 5-8 (conflicto)
+Vacunados_Influenza,627,Coordinaciones zonales + central
+Atención_Psicológica,384,Salud mental + otorrino
+Tamizaje_VIH,170,Zona 4 (Manabí)
+Estudio_Ergonómico,200,Zona 6 (Cuenca)
+
+INFRAESTRUCTURA_TECNOLÓGICA
+Concepto,Cantidad,Impacto_Personal
+Cámaras_Total,5560,Multiplicador de fuerza - 1 operador vigila múltiples sectores
+Cámaras_Zona_1,1033,Suple falta de policías físicos en frontera
+Disponibilidad_Sistema,98.12%,Zona 1 - crítico para operatividad
+Centros_Zonales,10,Nodos estratégicos alta capacidad
+Centros_Locales,11,Nodos tácticos provinciales
+Salas_Operativas,10,Monitoreo satelital
+Total_Centros,31,Cobertura 100% territorio
+Instituciones_Articuladas,154,Red interinstitucional coordinada
+Ambulancias_Nuevas,186,Requiere 600-700 paramédicos adicionales estimados
